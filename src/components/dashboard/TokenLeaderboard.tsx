@@ -7,6 +7,8 @@ import type { SignalToken, NadToken } from "@/types/dashboard";
 interface TokenLeaderboardProps {
   signals: SignalToken[];
   nadItems: NadToken[];
+  onSelectToken: (token: SignalToken) => void;
+  selectedAddress?: string;
 }
 
 function shortenAddr(addr: string) {
@@ -23,7 +25,7 @@ function toMon(virtualMon: string): string {
   }
 }
 
-export function TokenLeaderboard({ signals, nadItems }: TokenLeaderboardProps) {
+export function TokenLeaderboard({ signals, nadItems, onSelectToken, selectedAddress }: TokenLeaderboardProps) {
   const nadMap = new Map(
     nadItems.map((n) => [n.tokenAddress.toLowerCase(), n])
   );
@@ -38,52 +40,55 @@ export function TokenLeaderboard({ signals, nadItems }: TokenLeaderboardProps) {
   });
 
   return (
-    <div className="overflow-hidden rounded-lg border border-border/50 bg-card/60 backdrop-blur">
-      <div className="border-b border-border/50 px-4 py-3">
-        <h3 className="text-sm font-medium text-muted-foreground">Token Leaderboard</h3>
-      </div>
+    <div className="overflow-hidden rounded-2xl border border-border/30 bg-card/50 backdrop-blur">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
-            <TableRow className="border-border/30 hover:bg-transparent">
-              <TableHead className="w-12 text-[10px] uppercase">#</TableHead>
-              <TableHead className="text-[10px] uppercase">Token</TableHead>
-              <TableHead className="text-right text-[10px] uppercase">Score</TableHead>
-              <TableHead className="text-right text-[10px] uppercase">B / S / Net</TableHead>
-              <TableHead className="text-right text-[10px] uppercase">MON</TableHead>
-              <TableHead className="text-right text-[10px] uppercase">Price</TableHead>
+            <TableRow className="border-border/20 hover:bg-transparent">
+              <TableHead className="w-10 text-[9px] uppercase tracking-wider">#</TableHead>
+              <TableHead className="text-[9px] uppercase tracking-wider">Token</TableHead>
+              <TableHead className="text-right text-[9px] uppercase tracking-wider">Score</TableHead>
+              <TableHead className="text-right text-[9px] uppercase tracking-wider">B / S</TableHead>
+              <TableHead className="text-right text-[9px] uppercase tracking-wider">MON</TableHead>
+              <TableHead className="text-right text-[9px] uppercase tracking-wider">Price</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             <AnimatePresence>
-              {enriched.map((t, i) => (
-                <motion.tr
-                  key={t.token}
-                  layout
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.25, delay: i * 0.03 }}
-                  className="border-border/20 hover:bg-muted/10"
-                >
-                  <TableCell className="font-mono text-xs text-muted-foreground">{i + 1}</TableCell>
-                  <TableCell className="font-mono text-xs">
-                    {t.symbol ?? shortenAddr(t.token)}
-                  </TableCell>
-                  <TableCell className="text-right font-mono text-xs">{t.score}</TableCell>
-                  <TableCell className="text-right font-mono text-xs text-muted-foreground">
-                    <span className="text-emerald-400">{t.buys}</span>
-                    {" / "}
-                    <span className="text-red-400">{t.sells}</span>
-                    {" / "}
-                    <span className="text-foreground">{t.net}</span>
-                  </TableCell>
-                  <TableCell className="text-right font-mono text-xs">{toMon(t.virtualMon)}</TableCell>
-                  <TableCell className="text-right font-mono text-xs">
-                    {t.priceUsd != null ? `$${t.priceUsd.toFixed(4)}` : "—"}
-                  </TableCell>
-                </motion.tr>
-              ))}
+              {enriched.map((t, i) => {
+                const isSelected = selectedAddress?.toLowerCase() === t.token.toLowerCase();
+                return (
+                  <motion.tr
+                    key={t.token}
+                    layout
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2, delay: i * 0.02 }}
+                    onClick={() => onSelectToken(t)}
+                    className={`cursor-pointer border-border/10 transition-colors ${
+                      isSelected
+                        ? "bg-primary/5"
+                        : "hover:bg-muted/5"
+                    }`}
+                  >
+                    <TableCell className="font-mono text-[11px] text-muted-foreground">{i + 1}</TableCell>
+                    <TableCell className="font-mono text-[11px] font-medium">
+                      {t.symbol ?? shortenAddr(t.token)}
+                    </TableCell>
+                    <TableCell className="text-right font-mono text-[11px]">{t.score}</TableCell>
+                    <TableCell className="text-right font-mono text-[11px] text-muted-foreground">
+                      <span className="text-emerald-400">{t.buys}</span>
+                      {" / "}
+                      <span className="text-red-400">{t.sells}</span>
+                    </TableCell>
+                    <TableCell className="text-right font-mono text-[11px]">{toMon(t.virtualMon)}</TableCell>
+                    <TableCell className="text-right font-mono text-[11px]">
+                      {t.priceUsd != null ? `$${t.priceUsd.toFixed(4)}` : "—"}
+                    </TableCell>
+                  </motion.tr>
+                );
+              })}
             </AnimatePresence>
           </TableBody>
         </Table>
