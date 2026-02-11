@@ -1,7 +1,20 @@
+import { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import {
+  LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer,
+} from "recharts";
 import type { SignalToken, NadToken } from "@/types/dashboard";
+
+interface HistoryPoint {
+  ts: number;
+  score: number;
+  priceUsd: number | null;
+  virtualMon: number;
+}
+
+const MAX_HISTORY = 60;
 
 interface TokenDetailProps {
   signal: SignalToken | null;
@@ -24,6 +37,36 @@ function toMon(virtualMon: string): string {
 }
 
 export function TokenDetail({ signal, nadItems, onClose }: TokenDetailProps) {
+  const historiesRef = useRef<Map<string, HistoryPoint[]>>(new Map());
+  const [history, setHistory] = useState<HistoryPoint[]>([]);
+
+  // Accumulate history
+  useEffect(() => {
+    if (!signal) return;
+    const key = signal.token.toLowerCase();
+    const arr = historiesRef.current.get(key) ?? [];
+    const nad = nadItems.find(
+      (n) => n.tokenAddress.toLowerCase() === key
+    );
+    const mon = (() => {
+      try { return Number(BigInt(signal.virtualMon)) / 1e18; } catch { return 0; }
+    })();
+    const point: HistoryPoint = {
+      ts: Date.now(),
+      score: signal.score,
+      priceUsd: nad?.priceUsd ?? null,
+      virtualMon: mon,
+    };
+    // Deduplicate: don't push if last point has same score+price
+    const last = arr[arr.length - 1];
+    if (!last || last.score !== point.score || last.priceUsd !== point.priceUsd) {
+      arr.push(point);
+      if (arr.length > MAX_HISTORY) arr.shift();
+      historiesRef.current.set(key, arr);
+    }
+    setHistory([...arr]);
+  }, [signal, nadItems]);
+
   const nad = signal
     ? nadItems.find(
         (n) => n.tokenAddress.toLowerCase() === signal.token.toLowerCase()
@@ -33,11 +76,19 @@ export function TokenDetail({ signal, nadItems, onClose }: TokenDetailProps) {
   const symbol =
     nad?.symbol && nad.symbol !== "UNKNOWN" ? nad.symbol : signal ? shortenAddr(signal.token) : "";
 
+  // Determine chart data key
+  const hasPriceHistory = history.some((h) => h.priceUsd != null);
+  const chartKey = hasPriceHistory ? "priceUsd" : "score";
+  const chartLabel = hasPriceHistory ? "Price USD" : "Score";
+  const chartData = history.map((h, i) => ({
+    idx: i + 1,
+    value: chartKey === "priceUsd" ? (h.priceUsd ?? 0) : h.score,
+  }));
+
   return (
     <AnimatePresence>
       {signal && (
         <>
-          {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -46,7 +97,6 @@ export function TokenDetail({ signal, nadItems, onClose }: TokenDetailProps) {
             className="fixed inset-0 z-40 bg-background/60 backdrop-blur-sm"
           />
 
-          {/* Panel */}
           <motion.aside
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
@@ -70,6 +120,42 @@ export function TokenDetail({ signal, nadItems, onClose }: TokenDetailProps) {
             </div>
 
             <div className="flex-1 space-y-5 overflow-y-auto p-5">
+              {/* Mini history chart */}
+              {chartData.length > 1 && (
+                <div className="rounded-xl border border-border/20 bg-background/40 p-3">
+                  <p className="mb-2 text-[9px] uppercase tracking-wider text-muted-foreground">
+                    {chartLabel} — last {chartData.length} samples
+                  </p>
+                  <div className="h-28">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={chartData}>
+                        <XAxis dataKey="idx" hide />
+                        <YAxis
+                          domain={["auto", "auto"]}
+                          hide
+                        />
+                        <Tooltip
+                          contentStyle={{
+                            background: "hsl(0,0%,8%)",
+                            border: "1px solid hsl(0,0%,15%)",
+                            borderRadius: 10,
+                            fontSize: 10,
+                          }}
+                        />
+                        <Line
+                          type="monotone"
+                          dataKey="value"
+                          stroke="hsl(350, 80%, 55%)"
+                          strokeWidth={1.5}
+                          dot={false}
+                          animationDuration={400}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
+                  </div>
+                </div>
+              )}
+
               {/* Address */}
               <div>
                 <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Address</p>
@@ -88,7 +174,6 @@ export function TokenDetail({ signal, nadItems, onClose }: TokenDetailProps) {
                 <StatItem label="Virtual MON" value={toMon(signal.virtualMon)} />
               </div>
 
-              {/* NAD enriched data */}
               {nad && (
                 <div>
                   <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground">
