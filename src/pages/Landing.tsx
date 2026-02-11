@@ -52,7 +52,7 @@ const Landing = () => {
             poster=""
           >
             {/* Replace src with your uploaded video path */}
-            <source src="/launch-video.mp4" type="video/mp4" />
+            <source src="https://files.gitbook.com/v0/b/gitbook-x-prod.appspot.com/o/spaces%2FwN9gr7D53un73iG7LD9D%2Fuploads%2FBR48pS2KXLCAbrMKDRsW%2Fc1_fast_mute.mp4?alt=media&token=faa62275-1fa8-43bb-9f1d-c5f95c2999ff" type="video/mp4" />
             <div className="w-full aspect-video bg-card flex items-center justify-center text-muted-foreground text-xs">
               Launch video
             </div>
