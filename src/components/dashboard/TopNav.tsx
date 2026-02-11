@@ -1,6 +1,7 @@
 import { motion } from "framer-motion";
 import { formatDistanceToNow } from "date-fns";
 import { Link } from "react-router-dom";
+import { useFlash } from "@/hooks/useStreamingEffects";
 
 interface TopNavProps {
   ts?: string;
@@ -11,6 +12,7 @@ interface TopNavProps {
 export function TopNav({ ts, isLoading, monPrice }: TopNavProps) {
   const staleness = ts ? formatDistanceToNow(new Date(ts), { addSuffix: true }) : "—";
   const isStale = ts ? Date.now() - new Date(ts).getTime() > 30000 : true;
+  const priceFlash = useFlash(monPrice);
 
   return (
     <header className="sticky top-0 z-50 border-b border-border/30 bg-background/70 backdrop-blur-2xl">
@@ -29,9 +31,17 @@ export function TopNav({ ts, isLoading, monPrice }: TopNavProps) {
 
         <div className="flex items-center gap-3">
           {monPrice != null && (
-            <span className="rounded-lg border border-border/40 bg-card/50 px-2.5 py-1 font-mono text-[11px] text-muted-foreground">
+            <motion.span
+              animate={priceFlash ? { scale: [1, 1.06, 1] } : {}}
+              transition={{ duration: 0.3 }}
+              className={`rounded-lg border px-2.5 py-1 font-mono text-[11px] transition-colors duration-500 ${
+                priceFlash
+                  ? "border-primary/50 bg-primary/10 text-foreground"
+                  : "border-border/40 bg-card/50 text-muted-foreground"
+              }`}
+            >
               MON <span className="text-foreground">${monPrice.toFixed(4)}</span>
-            </span>
+            </motion.span>
           )}
           <div className="flex items-center gap-2 rounded-lg border border-border/40 bg-card/50 px-2.5 py-1">
             <motion.div
