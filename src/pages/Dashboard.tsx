@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { StreamingText } from "@/components/dashboard/StreamingText";
 import { TopNav } from "@/components/dashboard/TopNav";
 import { IntentCards } from "@/components/dashboard/IntentCards";
 import { USDCCard } from "@/components/dashboard/USDCCard";
@@ -57,14 +58,19 @@ export default function Dashboard() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
-                  className="rounded-2xl border border-border/40 bg-card/50 p-5 backdrop-blur"
+                  className="rounded-2xl border border-primary/10 bg-card/50 p-5 backdrop-blur"
                 >
-                  <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
-                    Decision Summary
-                  </h3>
-                  <pre className="whitespace-pre-wrap text-[13px] leading-relaxed text-foreground/70">
-                    {status.decision_summary}
-                  </pre>
+                  <div className="mb-3 flex items-center gap-2">
+                    <motion.div
+                      className="h-1.5 w-1.5 rounded-full bg-primary"
+                      animate={{ opacity: [1, 0.3, 1] }}
+                      transition={{ repeat: Infinity, duration: 1.5 }}
+                    />
+                    <h3 className="text-xs font-semibold uppercase tracking-[0.15em] text-muted-foreground">
+                      Decision Stream
+                    </h3>
+                  </div>
+                  <StreamingText text={status.decision_summary} />
                 </motion.div>
               )}
             </motion.div>
