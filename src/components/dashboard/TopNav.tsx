@@ -21,6 +21,9 @@ export function TopNav({ ts, isLoading, monPrice }: TopNavProps) {
           <Link to="/" className="text-sm font-bold tracking-tight text-foreground">
             Molter<span className="text-primary"> OS</span>
           </Link>
+          <span className="hidden sm:inline-flex items-center rounded-md border border-primary/20 bg-primary/5 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.2em] text-primary/80">
+            Internal
+          </span>
           <Link
             to="/insights"
             className="text-xs text-muted-foreground transition-colors hover:text-foreground"
