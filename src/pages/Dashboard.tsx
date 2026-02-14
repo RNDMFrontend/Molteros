@@ -9,6 +9,7 @@ import { BarChartPanel } from "@/components/dashboard/BarChartPanel";
 import { ActivityLog } from "@/components/dashboard/ActivityLog";
 import { TokenDetail } from "@/components/dashboard/TokenDetail";
 import { DashboardSkeleton } from "@/components/dashboard/DashboardSkeleton";
+import { SystemPolicy } from "@/components/dashboard/SystemPolicy";
 import { useStatus, useNadTop, useLogs } from "@/hooks/useDashboardData";
 import type { SignalToken } from "@/types/dashboard";
 
@@ -52,6 +53,8 @@ export default function Dashboard() {
                   <BarChartPanel signals={signals} nadItems={nadItems} />
                 </div>
               </div>
+
+              <SystemPolicy status={status} />
 
               {status?.decision_summary && (
                 <motion.div

@@ -3,6 +3,9 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Boot from "./pages/Boot";
+import SyncVault from "./pages/SyncVault";
+import Lock from "./pages/Lock";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
@@ -17,7 +20,10 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Landing />} />
+          <Route path="/" element={<Boot />} />
+          <Route path="/sync" element={<SyncVault />} />
+          <Route path="/lock" element={<Lock />} />
+          <Route path="/landing" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/insights" element={<Insights />} />
           <Route path="*" element={<NotFound />} />
