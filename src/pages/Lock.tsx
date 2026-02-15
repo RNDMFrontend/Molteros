@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { Twitter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const VIDEO_URL =
@@ -79,9 +79,9 @@ export default function Lock() {
         {/* Center */}
         <div className="flex-1 flex flex-col items-center justify-center gap-4">
           <motion.h1
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
             className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground text-center"
           >
             Decision Engine Online
@@ -89,7 +89,7 @@ export default function Lock() {
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.3 }}
+            transition={{ delay: 1.0, duration: 0.8 }}
             className="text-sm text-muted-foreground text-center"
           >
             Policy loaded. JSON stable. Vault synced.
@@ -98,11 +98,11 @@ export default function Lock() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
+            transition={{ delay: 1.6, duration: 0.8 }}
             className="mt-6"
           >
             <Button size="lg" className="gap-2" onClick={enter}>
-              Enter Dashboard <ArrowRight className="w-4 h-4" />
+              <Twitter className="w-4 h-4" /> Login with X
             </Button>
           </motion.div>
         </div>
