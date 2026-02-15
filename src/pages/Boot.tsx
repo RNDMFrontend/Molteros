@@ -105,7 +105,7 @@ export default function Boot() {
   }, [progress, stageIdx]);
 
   const handleExit = useCallback(() => {
-    navigate("/sync");
+    navigate("/lock");
   }, [navigate]);
 
   useEffect(() => {
