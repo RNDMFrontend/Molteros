@@ -84,7 +84,7 @@ export default function Lock() {
             transition={{ duration: 1.2, ease: "easeOut" }}
             className="text-3xl sm:text-5xl font-extrabold tracking-tight text-foreground text-center"
           >
-            Decision Engine Online
+            Prediction Market OS
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
@@ -92,7 +92,7 @@ export default function Lock() {
             transition={{ delay: 1.0, duration: 0.8 }}
             className="text-sm text-muted-foreground text-center"
           >
-            Policy loaded. JSON stable. Vault synced.
+            Any token. 1-minute markets.
           </motion.p>
 
           <motion.div
