@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
-import { Twitter } from "lucide-react";
+import { Wallet } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const VIDEO_URL =
@@ -102,7 +102,7 @@ export default function Lock() {
             className="mt-6"
           >
             <Button size="lg" className="gap-2" onClick={enter}>
-              <Twitter className="w-4 h-4" /> Login with X
+              <Wallet className="w-4 h-4" /> Connect Wallet
             </Button>
           </motion.div>
         </div>
