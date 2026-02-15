@@ -9,6 +9,9 @@ import Lock from "./pages/Lock";
 import Landing from "./pages/Landing";
 import Dashboard from "./pages/Dashboard";
 import Insights from "./pages/Insights";
+import MarketSetup from "./pages/MarketSetup";
+import Probabilities from "./pages/Probabilities";
+import Play from "./pages/Play";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -26,6 +29,9 @@ const App = () => (
           <Route path="/landing" element={<Landing />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/insights" element={<Insights />} />
+          <Route path="/markets" element={<MarketSetup />} />
+          <Route path="/probabilities" element={<Probabilities />} />
+          <Route path="/play" element={<Play />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
