@@ -96,7 +96,7 @@ function MarketCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="rounded-xl border border-border bg-card/60 backdrop-blur p-4 flex flex-col gap-3"
+      className="rounded-xl border border-border bg-card/60 backdrop-blur p-3 sm:p-4 flex flex-col gap-2 sm:gap-3"
     >
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -310,7 +310,7 @@ export default function Play() {
             In-Play
           </span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="hidden sm:flex items-center gap-2">
           {walletConnected && (
             <button
               onClick={() => setShowOperator(!showOperator)}
@@ -332,8 +332,8 @@ export default function Play() {
       </div>
 
       {/* Economics bar */}
-      <div className="flex items-center justify-center gap-4 py-2 border-b border-border/50">
-        <span className="text-[10px] text-muted-foreground">
+      <div className="flex items-center justify-center gap-4 py-2 border-b border-border/50 px-4">
+        <span className="text-[9px] sm:text-[10px] text-muted-foreground text-center">
           Seeded: 1 MON/side · Fee: 5% · Settlement: permissionless
         </span>
       </div>
