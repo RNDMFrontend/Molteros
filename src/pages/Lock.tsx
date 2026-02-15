@@ -36,6 +36,7 @@ export default function Lock() {
   const navigate = useNavigate();
   const gwStatus = useGatewayStatus();
   const [exiting, setExiting] = useState(false);
+  const [mobileNotice, setMobileNotice] = useState(false);
 
   const enter = useCallback(() => {
     if (exiting) return;
@@ -105,13 +106,22 @@ export default function Lock() {
             <Button size="lg" className="gap-2 hidden sm:inline-flex" onClick={enter}>
               <Wallet className="w-4 h-4" /> Connect Wallet
             </Button>
-            {/* Mobile: Tap to enter */}
+            {/* Mobile: show notice */}
             <button
-              onClick={enter}
+              onClick={() => setMobileNotice(true)}
               className="sm:hidden text-xs text-muted-foreground border border-border/50 rounded-full px-6 py-2 active:scale-95 transition-transform"
             >
               Tap to enter →
             </button>
+            {mobileNotice && (
+              <motion.p
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="sm:hidden text-[11px] text-muted-foreground mt-3 text-center"
+              >
+                Live functionality available on desktop only.
+              </motion.p>
+            )}
           </motion.div>
         </div>
 
