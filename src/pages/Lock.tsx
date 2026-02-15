@@ -40,7 +40,7 @@ export default function Lock() {
   const enter = useCallback(() => {
     if (exiting) return;
     setExiting(true);
-    setTimeout(() => navigate("/dashboard"), 500);
+    setTimeout(() => navigate("/markets"), 500);
   }, [exiting, navigate]);
 
   // Key press to enter
