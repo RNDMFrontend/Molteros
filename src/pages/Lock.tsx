@@ -101,9 +101,17 @@ export default function Lock() {
             transition={{ delay: 1.6, duration: 0.8 }}
             className="mt-6"
           >
-            <Button size="lg" className="gap-2" onClick={enter}>
+            {/* Desktop: Connect Wallet button */}
+            <Button size="lg" className="gap-2 hidden sm:inline-flex" onClick={enter}>
               <Wallet className="w-4 h-4" /> Connect Wallet
             </Button>
+            {/* Mobile: Tap to enter */}
+            <button
+              onClick={enter}
+              className="sm:hidden text-xs text-muted-foreground border border-border/50 rounded-full px-6 py-2 active:scale-95 transition-transform"
+            >
+              Tap to enter →
+            </button>
           </motion.div>
         </div>
 
